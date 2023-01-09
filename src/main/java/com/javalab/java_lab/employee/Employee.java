@@ -1,6 +1,5 @@
 package com.javalab.java_lab.employee;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,29 +42,7 @@ public class Employee {
     @Setter
     @Column(name = "job_title")
     private String jobTitle;
-
-    // @Getter
-    // @Setter
-    // @Column(name = "department_id")
-    // private String departmentId;
-
-    // @Getter
-    // @Setter
-    // @Column(name = "department_name")
-    // private String departmentName;
-
-    // @Getter
-    // @Setter
-    // @Column(name = "department_location")
-    // private String departmentLocation;
-
-    // @Getter
-    // @Setter
-    // @Column(name = "department_description")
-    // private String departmentDescription;
-
     public Employee(){}
-
     public Employee(String firstName, String lastName, Double salary, Integer age, String jobTitle){
         this.firstName = firstName;
         this.lastName = lastName;
@@ -73,8 +50,6 @@ public class Employee {
         this.age = age;
         this.jobTitle = jobTitle;
     }
-
-
     @Override
     public String toString() {
         return String.format(
