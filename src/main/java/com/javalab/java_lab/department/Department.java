@@ -15,6 +15,7 @@ public class Department {
     @Column(name = "department_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
+    @Setter
     private Long id;
 
     @Column(name = "department_name", nullable = false)

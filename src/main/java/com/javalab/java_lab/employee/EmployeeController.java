@@ -56,7 +56,7 @@ public class EmployeeController {
         }
         //externalDocs = @ExternalDocumentation(),
     )
-    public List<Employee> hey() {
+    public List<Employee> getAllEmployees() {
         return employeeServices.getAllEmployees();
     }
 
@@ -121,7 +121,6 @@ public class EmployeeController {
     )
     public ResponseEntity<Employee> updateOneEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
         Optional<Employee> optionalEmployee = employeeServices.getOneEmployee(id);
-        
         if(optionalEmployee.isPresent()) {
             Employee foundEmployee = optionalEmployee.get();
             if(employee.getDepartmentId() != null) {
@@ -132,11 +131,21 @@ public class EmployeeController {
                     foundEmployee.setDepartment(department);
                 }
             }
-            foundEmployee.setFirstName(employee.getFirstName());
-            foundEmployee.setLastName(employee.getLastName());
-            foundEmployee.setSalary(employee.getSalary());
-            foundEmployee.setJobTitle(employee.getJobTitle());
-            foundEmployee.setAge(employee.getAge());
+            if(employee.getFirstName() != null && employee.getFirstName().length() > 0 && employee.getFirstName() != foundEmployee.getFirstName()) {
+                foundEmployee.setFirstName(employee.getFirstName());
+            }
+            if(employee.getLastName() != null && employee.getLastName().length() > 0 && employee.getLastName() != foundEmployee.getLastName()) {
+                foundEmployee.setLastName(employee.getLastName());
+            }
+            if(employee.getSalary() != null && employee.getSalary() != 0 && employee.getSalary() != foundEmployee.getSalary()) {
+                foundEmployee.setSalary(employee.getSalary());
+            }
+            if(employee.getJobTitle() != null && employee.getJobTitle().length() > 0 && employee.getJobTitle() != foundEmployee.getJobTitle()) {
+                foundEmployee.setJobTitle(employee.getJobTitle());
+            }
+            if(employee.getAge() != null && employee.getAge() > 0 && employee.getAge() != foundEmployee.getAge()) {
+                foundEmployee.setAge(employee.getAge());
+            }
             employeeRepository.save(foundEmployee);
             return new ResponseEntity<Employee>(foundEmployee, HttpStatus.OK);
         } else{

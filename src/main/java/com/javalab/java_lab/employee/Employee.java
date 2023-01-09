@@ -18,6 +18,7 @@ public class Employee {
     @Column(name = "employee_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
+    @Setter
     private Long id;
 
     // Lombok for getter & setter readability;
