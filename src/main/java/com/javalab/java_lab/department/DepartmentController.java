@@ -27,7 +27,6 @@ public class DepartmentController {
 
     @PostMapping("/createDepartment")
     public Department createDepartment(@org.springframework.web.bind.annotation.RequestBody Department department ) {
-        System.out.println(department);
         departmentServices.createNewDeparment(department);
         return department;
     }

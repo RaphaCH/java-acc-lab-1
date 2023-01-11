@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityExistsException;
+
 @Service
 public class DepartmentServices {
     
@@ -17,6 +19,8 @@ public class DepartmentServices {
         Department dptExists =  departmentRepository.findDepartmentByName(dptName);
         if(dptExists == null) {
             departmentRepository.save(department);
+        } else {
+            throw new EntityExistsException("department " + dptName + " already exists in the database");
         }
     }
 

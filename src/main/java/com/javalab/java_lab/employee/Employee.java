@@ -1,9 +1,14 @@
 package com.javalab.java_lab.employee;
 
 
+import org.springframework.validation.annotation.Validated;
+
 import com.javalab.java_lab.department.Department;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +16,7 @@ import lombok.Setter;
 @Table(name = "employees", uniqueConstraints = {
     //@UniqueConstraint(name = "example_student_email_unique", columnNames = "example_column_name")
 })
+@Validated
 public class Employee {
 
     // Oracle db annotarion;
@@ -25,11 +31,13 @@ public class Employee {
     @Getter
     @Setter
     @Column(name = "first_name", nullable = false)
+    @NotBlank(message = "Providing a first name is mandatory")
     private String firstName;
 
     @Getter
     @Setter
     @Column(name = "last_name", nullable = false)
+    @NotBlank(message = "Providing a last name is mandatory")
     private String lastName;
 
     @Getter
@@ -40,6 +48,8 @@ public class Employee {
     @Getter
     @Setter
     @Column(name = "age", nullable = false)
+    @NotNull(message = "Providing an age value is mandatory. It must be a number")
+    @Min(value = 18, message = "Age cannot be less than 18")
     private Integer age;
 
     @Getter

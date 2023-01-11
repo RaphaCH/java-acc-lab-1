@@ -1,7 +1,7 @@
 package com.javalab.java_lab.department;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +19,7 @@ public class Department {
     private Long id;
 
     @Column(name = "department_name", nullable = false)
+    @NotNull(message = "A department name must be provided")
     @Getter
     @Setter
     private String name;
