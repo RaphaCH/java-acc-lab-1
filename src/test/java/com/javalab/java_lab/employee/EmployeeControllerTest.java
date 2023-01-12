@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.javalab.java_lab.AppConfigTest;
-import com.javalab.java_lab.department.Department;
 import com.javalab.java_lab.department.DepartmentRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,16 +77,19 @@ public class EmployeeControllerTest extends AppConfigTest {
         Employee employee = createMockEmployee1();
 
         Long testEmployeeId = 1L;
-        when(employeeServices.getOneEmployee(testEmployeeId)).thenReturn(new ResponseEntity(employee, HttpStatus.OK));
+        ResponseEntity<Employee> positivoResponse = new ResponseEntity<Employee>(employee, HttpStatus.OK);
+        Mockito.doReturn(positivoResponse).when(employeeServices.getOneEmployee(testEmployeeId));
 
         ResponseEntity<?> result = employeeController.getOneEmployee(1L);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(employee, result.getBody());
 
-        when(employeeServices.getOneEmployee(2L)).thenReturn(new ResponseEntity("{ \"errorCode\": \"404\", " +
-                "  \"errorMessage\": \"No Employee was found with the given id.\", " +
-                "  \"subCode\": \"Oracle error code if any or any other error\", " +
-                "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND));
+
+        ResponseEntity<String> negativeResponse = new ResponseEntity<String>("{ \"errorCode\": \"404\", " +
+        "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+        "  \"subCode\": \"Oracle error code if any or any other error\", " +
+        "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND);
+        Mockito.doReturn(negativeResponse).when(employeeServices.getOneEmployee(2L));
 
         result = employeeController.getOneEmployee(2L);
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
@@ -113,12 +115,12 @@ public class EmployeeControllerTest extends AppConfigTest {
 
     @Test
     public void testDeleteOneEmployee_exists() {
-        Employee employee = createMockEmployee1();
         long id = 1L;
         // Mockito.when(employeeRepository.existsById(id)).thenReturn(true);
         // Mockito.doNothing().when(employeeRepository).deleteById(id);
-        Mockito.when(employeeServices.deleteOneEmployee(id))
-                .thenReturn(new ResponseEntity("Employee with id 1 has been deleted", HttpStatus.OK));
+
+        ResponseEntity<String> positiveResponse = new ResponseEntity<String>("Employee with id 1 has been deleted", HttpStatus.OK);
+        Mockito.doReturn(positiveResponse).when(employeeServices.deleteOneEmployee(id));
 
         ResponseEntity<?> result = employeeController.deleteOneEmployee(id);
 
@@ -132,11 +134,12 @@ public class EmployeeControllerTest extends AppConfigTest {
     public void testDeleteOneEmployee_doestNotExist() {
         long id = 1L;
 
-        Mockito.when(employeeServices.deleteOneEmployee(id))
-                .thenReturn(new ResponseEntity("{ \"errorCode\": \"404\", " +
-                "  \"errorMessage\": \"No Employee was found with the given id.\", " +
-                "  \"subCode\": \"Oracle error code if any or any other error\", " +
-                "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND));
+        ResponseEntity<String> negativeResponse = new ResponseEntity<String>("{ \"errorCode\": \"404\", " +
+        "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+        "  \"subCode\": \"Oracle error code if any or any other error\", " +
+        "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND);
+        Mockito.doReturn(negativeResponse).when(employeeServices.deleteOneEmployee(id));
+               
 
         ResponseEntity<?> result = employeeController.deleteOneEmployee(id);
         Assertions.assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
@@ -151,8 +154,9 @@ public class EmployeeControllerTest extends AppConfigTest {
         Employee updateEmployee = createMockEmployee2();
         long id = 1L;
 
-        Mockito.when(employeeServices.updateOneEmployee(id, updateEmployee)).thenReturn(new ResponseEntity(updateEmployee, HttpStatus.OK));
-    
+        ResponseEntity<Employee> positiveResponse = new ResponseEntity<Employee>(updateEmployee, HttpStatus.OK);
+        
+        Mockito.doReturn(positiveResponse).when(employeeServices.updateOneEmployee(id, updateEmployee));
         ResponseEntity<?> result = employeeController.updateOneEmployee(id, updateEmployee);
 
         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -166,10 +170,11 @@ public class EmployeeControllerTest extends AppConfigTest {
         Employee updatesEmployee = createMockEmployee2();
         long id = 3L;
 
-        Mockito.when(employeeServices.updateOneEmployee(id, updatesEmployee)).thenReturn(new ResponseEntity("{ \"errorCode\": \"404\", " +
-                "  \"errorMessage\": \"No Employee was found with the given id.\", " +
-                "  \"subCode\": \"Oracle error code if any or any other error\", " +
-                "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND));
+        ResponseEntity<String> negativeResponse = new ResponseEntity<String>("{ \"errorCode\": \"404\", " +
+        "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+        "  \"subCode\": \"Oracle error code if any or any other error\", " +
+        "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND);
+        Mockito.doReturn(negativeResponse).when(employeeServices.updateOneEmployee(id, updatesEmployee));
 
         ResponseEntity<?> result = employeeController.updateOneEmployee(id, updatesEmployee);
 
