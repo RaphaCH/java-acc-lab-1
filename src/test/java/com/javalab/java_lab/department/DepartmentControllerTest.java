@@ -16,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.javalab.java_lab.AppConfigTest;
+import com.javalab.java_lab.controller.DepartmentController;
+import com.javalab.java_lab.dao.DepartmentRepository;
+import com.javalab.java_lab.model.DepartmentDto;
+import com.javalab.java_lab.service.DepartmentServices;
 
 import jakarta.persistence.EntityExistsException;
 
@@ -32,8 +36,8 @@ public class DepartmentControllerTest extends AppConfigTest {
     @Autowired
     private DepartmentController departmentController;
 
-    private Department createMockDepartment() {
-        Department department = Mockito.mock(Department.class);
+    private DepartmentDto createMockDepartment() {
+        DepartmentDto department = Mockito.mock(DepartmentDto.class);
         department.setId(1L);
         department.setName("Mock department");
         department.setDescription("Description of Mock dept");
@@ -41,8 +45,8 @@ public class DepartmentControllerTest extends AppConfigTest {
         return department;
     }
 
-    private Department createMockDepartment2() {
-        Department department = Mockito.mock(Department.class);
+    private DepartmentDto createMockDepartment2() {
+        DepartmentDto department = Mockito.mock(DepartmentDto.class);
         department.setId(2L);
         department.setName("Mock department 2 ");
         department.setDescription("Description of Mock dept 2 ");
@@ -52,24 +56,24 @@ public class DepartmentControllerTest extends AppConfigTest {
 
     @Test
     public void testGetAllDepartments() {
-        Department department1 = createMockDepartment();
-        Department department2 = createMockDepartment2();
-        List<Department> departments = Arrays.asList(department1, department2);
+        DepartmentDto department1 = createMockDepartment();
+        DepartmentDto department2 = createMockDepartment2();
+        List<DepartmentDto> departments = Arrays.asList(department1, department2);
 
         Mockito.when(departmentServices.retrieveAllDepartments()).thenReturn(departments);
 
-        List<Department> result = departmentController.getAllDepartments();
+        List<DepartmentDto> result = departmentController.getAllDepartments();
         Assertions.assertEquals(departments, result);
     }
 
     @Test
     @DisplayName("creates new dept successfully")
     public void testCreateDepartment() {
-        Department department1 = createMockDepartment();
+        DepartmentDto department1 = createMockDepartment();
 
         Mockito.doNothing().when(departmentServices).createNewDeparment(department1);
 
-        Department department = departmentController.createDepartment(department1);
+        DepartmentDto department = departmentController.createDepartment(department1);
         Assertions.assertEquals(department, department1);
         Mockito.verify(departmentServices).createNewDeparment(department);
     }
@@ -77,13 +81,13 @@ public class DepartmentControllerTest extends AppConfigTest {
     @Test
     @DisplayName("creation fails, dept already exists")
     public void testCreateDepartmentFails() {
-        Department department1 = createMockDepartment();
+        DepartmentDto department1 = createMockDepartment();
         String dptName = "Mock department";
 
         Mockito.doThrow(new EntityExistsException()).when(departmentServices).createNewDeparment(department1);
 
         try {
-            Department department = departmentController.createDepartment(department1);
+            DepartmentDto department = departmentController.createDepartment(department1);
             fail("Expect EntityExistsException to be thrown");
         } catch (EntityExistsException e) {
             Mockito.verify(departmentServices, times(1)).createNewDeparment(department1);

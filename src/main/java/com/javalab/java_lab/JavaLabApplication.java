@@ -1,5 +1,6 @@
 package com.javalab.java_lab;
 
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,8 +15,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 	version = "1.0.0"), tags = {@Tag(name = "Employee Api contoller", description = "This is the global CRUD controller for the Employee model")})
 public class JavaLabApplication {
 
+	private static final Logger log = org.slf4j.LoggerFactory.getLogger(JavaLabApplication.class);
+
 	public static void main(String[] args) {
+		log.info("Starting Java Lab Application");
 		SpringApplication.run(JavaLabApplication.class, args);
+		log.info("Java Lab Application Started");
 	}
 
 	

@@ -1,4 +1,4 @@
-package com.javalab.java_lab.department;
+package com.javalab.java_lab.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Table(name = "departments", uniqueConstraints = {
     //@UniqueConstraint(columnNames = {"department_name"})
 })
-public class Department {
+public class DepartmentDto {
     
     @Id
     @Column(name = "department_id")
@@ -37,9 +37,9 @@ public class Department {
     // @OneToMany(targetEntity = Employee.class)
     // private List employees;
 
-    public Department(){}
+    public DepartmentDto(){}
 
-    public Department(String name, String description, String location) {
+    public DepartmentDto(String name, String description, String location) {
         this.name = name;
         this.description = description;
         this.location = location;

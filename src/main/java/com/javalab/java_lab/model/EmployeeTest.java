@@ -1,9 +1,7 @@
-package com.javalab.java_lab.employee;
+package com.javalab.java_lab.model;
 
 
 import org.springframework.validation.annotation.Validated;
-
-import com.javalab.java_lab.department.Department;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -17,7 +15,7 @@ import lombok.Setter;
     //@UniqueConstraint(name = "example_student_email_unique", columnNames = "example_column_name")
 })
 @Validated
-public class Employee {
+public class EmployeeTest {
 
     // Oracle db annotarion;
     @Id
@@ -42,7 +40,8 @@ public class Employee {
 
     @Getter
     @Setter
-    @Column(name = "salary")
+    @Column(name = "salary", nullable = false)
+    @NotNull(message = "Providing a salary value is mandatory. It can be a number with decimals.")
     private Double salary;
 
     @Getter
@@ -57,10 +56,10 @@ public class Employee {
     @Column(name = "job_title")
     private String jobTitle;
 
-    @ManyToOne(targetEntity = Department.class)
+    @ManyToOne(targetEntity = DepartmentDto.class)
     @Getter
     @Setter
-    private Department department;
+    private DepartmentDto department;
 
     @Getter
     @Setter
@@ -82,9 +81,9 @@ public class Employee {
     // @Column(name = "department_description")
     // private String departmentDescription;
 
-    public Employee(){}
+    public EmployeeTest(){}
 
-    public Employee(String firstName, String lastName, Double salary, Integer age, String jobTitle, Department department){
+    public EmployeeTest(String firstName, String lastName, Double salary, Integer age, String jobTitle, DepartmentDto department){
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
