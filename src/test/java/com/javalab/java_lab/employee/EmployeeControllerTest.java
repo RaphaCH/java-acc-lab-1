@@ -1,13 +1,11 @@
 package com.javalab.java_lab.employee;
 
+import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,11 +37,6 @@ public class EmployeeControllerTest extends AppConfigTest {
     @Autowired
     private EmployeeController employeeController;
 
-    @Test
-    public void shouldWork() {
-        System.out.println("OK");
-    }
-
     private Employee createMockEmployee1() {
         Employee employee = Mockito.mock(Employee.class);
         employee.setId(1L);
@@ -65,15 +58,6 @@ public class EmployeeControllerTest extends AppConfigTest {
         employee.setSalary(300.5);
         employee.setJobTitle("Something Else Title");
         return employee;
-    }
-
-    private Department createMockDepartment() {
-        Department department = Mockito.mock(Department.class);
-        department.setId(1L);
-        department.setName("Prestigious Comics");
-        department.setDescription("Housing the best comics there are");
-        department.setLocation("Locomotion");
-        return department;
     }
 
     @Test
@@ -127,74 +111,74 @@ public class EmployeeControllerTest extends AppConfigTest {
         assertEquals(employee, result.getBody());
     }
 
-    // Can't get deleteTestMethod to work because of conditional method returning
-    // void;
+    @Test
+    public void testDeleteOneEmployee_exists() {
+        Employee employee = createMockEmployee1();
+        long id = 1L;
+        // Mockito.when(employeeRepository.existsById(id)).thenReturn(true);
+        // Mockito.doNothing().when(employeeRepository).deleteById(id);
+        Mockito.when(employeeServices.deleteOneEmployee(id))
+                .thenReturn(new ResponseEntity("Employee with id 1 has been deleted", HttpStatus.OK));
 
-    // @Test
-    // public void testDeleteOneEmployee_exists() {
-    // long id = 1;
-    // when(employeeRepository.existsById(id)).thenReturn(true);
-    // doAnswer(new Answer<Void>() {
-    // @Override public Void answer(InvocationOnMock invocation) {
-    // return new ResponseEntity<String>("Employee with id 1 has been deleted",
-    // HttpStatus.ok);
-    // }
-    // }).when(employeeRepository.deleteById(id));
-    // ResponseEntity<String> result = employeeController.deleteOneEmployee(id);
+        ResponseEntity<?> result = employeeController.deleteOneEmployee(id);
 
-    // verify(employeeRepository, times(1)).existsById(id);
-    // verify(employeeRepository, times(1)).deleteById(id);
-    // assertEquals(HttpStatus.OK, result.getStatusCode());
-    // assertEquals("Employee with id 1 has been deleted", result.getBody());
-    // }
+        // verify(employeeRepository, times(1)).existsById(id);
+        // verify(employeeRepository, times(1)).deleteById(id);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("Employee with id 1 has been deleted", result.getBody());
+    }
 
-    // @Test
-    // public void testUpdateOneEmployee() {
-    // Employee employee = createMockEmployee1();
-    // Department department = createMockDepartment();
-    // Employee secondEmployee = createMockEmployee2();
-    // long mockId = 1L;
+    @Test
+    public void testDeleteOneEmployee_doestNotExist() {
+        long id = 1L;
 
-    // when(employeeRepository.findById(mockId)).thenReturn(Optional.of(employee));
-    // // Apparently the line below is unnecessary code. why?
-    // //
-    // when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
-    // doNothing().when(employeeRepository).save(employee);
-    // doReturn(new ResponseEntity<Employee>(secondEmployee,
-    // HttpStatus.OK)).when(employeeServices.updateOneEmployee(mockId,
-    // secondEmployee));
+        Mockito.when(employeeServices.deleteOneEmployee(id))
+                .thenReturn(new ResponseEntity("{ \"errorCode\": \"404\", " +
+                "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+                "  \"subCode\": \"Oracle error code if any or any other error\", " +
+                "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND));
 
-    // ResponseEntity<?> result = employeeController.updateOneEmployee(1L,
-    // secondEmployee);
-    // assertEquals(HttpStatus.OK, result.getStatusCode());
-    // assertEquals(employee, result.getBody());
+        ResponseEntity<?> result = employeeController.deleteOneEmployee(id);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        Assertions.assertEquals("{ \"errorCode\": \"404\", " +
+        "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+        "  \"subCode\": \"Oracle error code if any or any other error\", " +
+        "  \"details\": \"error description from oracle if any or other error\" }", result.getBody());
+    }
 
-    // result = employeeController.updateOneEmployee(2L, secondEmployee);
-    // assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
-    // assertEquals(null, result.getBody());
-    // }
+    @Test
+    public void testUpdateOneEmployee_succeeds() {
+        Employee updateEmployee = createMockEmployee2();
+        long id = 1L;
 
-    // @Test
-    // public void testUpdateOneEmployee() {
-    //     Employee employee = createMockEmployee1();
-    //     Employee updateEmployee = createMockEmployee2();
-    //     Department department = createMockDepartment();
+        Mockito.when(employeeServices.updateOneEmployee(id, updateEmployee)).thenReturn(new ResponseEntity(updateEmployee, HttpStatus.OK));
+    
+        ResponseEntity<?> result = employeeController.updateOneEmployee(id, updateEmployee);
 
-    //     when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-    //     when(employeeRepository.save(employee)).thenReturn(employee);
-    //     when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
-    //     when(employeeServices.updateOneEmployee(1L, updateEmployee))
-    //             .thenReturn(new ResponseEntity(employee, HttpStatus.OK));
+        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
+        Assertions.assertEquals(updateEmployee, result.getBody());
+        Mockito.verify(employeeServices, Mockito.times(1)).updateOneEmployee(id, updateEmployee);
+    
+    }
 
-    //     ResponseEntity<?> response = employeeServices.updateOneEmployee(1L, updateEmployee);
-    //     System.out.println(response);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     Employee updatedEmployee = (Employee) response.getBody();
-    //     assertEquals("Jane", updatedEmployee.getFirstName());
-    //     assertEquals("Dae", updatedEmployee.getLastName());
-    //     assertEquals(300.5, updatedEmployee.getSalary(), 0);
-    //     assertEquals("Something Else Title", updatedEmployee.getJobTitle());
-    //     assertEquals(25, updatedEmployee.getAge().intValue());
-    //     verify(employeeRepository, times(1)).save(updatedEmployee);
-    // }
+    @Test
+    public void testUpdateOneEmployee_fails () {
+        Employee updatesEmployee = createMockEmployee2();
+        long id = 3L;
+
+        Mockito.when(employeeServices.updateOneEmployee(id, updatesEmployee)).thenReturn(new ResponseEntity("{ \"errorCode\": \"404\", " +
+                "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+                "  \"subCode\": \"Oracle error code if any or any other error\", " +
+                "  \"details\": \"error description from oracle if any or other error\" }", HttpStatus.NOT_FOUND));
+
+        ResponseEntity<?> result = employeeController.updateOneEmployee(id, updatesEmployee);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        Assertions.assertEquals("{ \"errorCode\": \"404\", " +
+        "  \"errorMessage\": \"No Employee was found with the given id.\", " +
+        "  \"subCode\": \"Oracle error code if any or any other error\", " +
+        "  \"details\": \"error description from oracle if any or other error\" }", result.getBody());
+        Mockito.verify(employeeServices, Mockito.times(1)).updateOneEmployee(id, updatesEmployee);
+    }
+
 }
