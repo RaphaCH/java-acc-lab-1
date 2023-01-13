@@ -1,16 +1,12 @@
 package com.javalab.java_lab.dao;
-
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
 @Table(name = "employees", uniqueConstraints = {
     //@UniqueConstraint(name = "example_student_email_unique", columnNames = "example_column_name")
 })
-@Getter
-@Setter
+@Data
 public class Employee {
 
     // Oracle db annotarion;
@@ -35,13 +31,9 @@ public class Employee {
     @Column(name = "job_title")
     private String jobTitle;
 
-    // @ManyToOne(targetEntity = Department.class)
-    // private Department department;
-
     @ManyToOne(targetEntity = Department.class)
     private Department department;
 
     @Column(name = "department_id", nullable = true)
     private Long departmentId;
-
 }

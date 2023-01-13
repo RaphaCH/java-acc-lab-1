@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javalab.java_lab.dao.Employee;
 import com.javalab.java_lab.model.EmployeeDto;
+import com.javalab.java_lab.model.Response;
 import com.javalab.java_lab.service.EmployeeServices;
 
 //import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/employess") 
-
+@RequestMapping("/employee") 
 public class EmployeeController {
 
     @Autowired
@@ -49,46 +49,51 @@ public class EmployeeController {
         }
         //externalDocs = @ExternalDocumentation(),
     )
-    public List<EmployeeDto> getAllEmployees() {
-        return employeeServices.getAllEmployees();
+    public ResponseEntity<Response> getAllEmployees() {
+        Response response = employeeServices.getAllEmployees();
+        return new ResponseEntity<Response>(response, response.getStatus());
     }
 
-    // @GetMapping("/{id}")
-    // @Operation(
-    //     tags = {"Employee Api contoller"},
-    //     summary = "Get one Employee from the Database, if it exists.",
-    //     description = "Get one employee from the database by providing his/her id in as a path parameter. Example: writing 1 on the path will retrieve the Employee with id 1, if he/she exists in the Database.",
-    //     parameters = {@Parameter(name = "id", example = "1", description = "Provide it as a number on the url path {id} where indicated")},
-    //     responses = {
-    //         @ApiResponse(responseCode = "200", description = "Response 200-ok whenever the provided id returns one found Employee from the Database.", useReturnTypeSchema = true, content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = EmployeePojo.class))),
-    //         @ApiResponse(responseCode = "404", description = "Response returned whenever the provided id does not find any Emoployee in the Database.")
-    //     }
-    // )
-    // public ResponseEntity<?> getOneEmployee(@PathVariable("id") long id) {
-    //     return employeeServices.getOneEmployee(id);
-    // }
+    @GetMapping("/{id}")
+    @Operation(
+        tags = {"Employee Api contoller"},
+        summary = "Get one Employee from the Database, if it exists.",
+        description = "Get one employee from the database by providing his/her id in as a path parameter. Example: writing 1 on the path will retrieve the Employee with id 1, if he/she exists in the Database.",
+        parameters = {@Parameter(name = "id", example = "1", description = "Provide it as a number on the url path {id} where indicated")},
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Response 200-ok whenever the provided id returns one found Employee from the Database.", useReturnTypeSchema = true, content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = EmployeeDto.class))),
+            @ApiResponse(responseCode = "404", description = "Response returned whenever the provided id does not find any Emoployee in the Database.")
+        }
+    )
+    public ResponseEntity<Response> getOneEmployee(@PathVariable("id") long id) {
+        Response response =  employeeServices.getOneEmployee(id);
+        return new ResponseEntity<Response>(response, response.getStatus());
+    }
 
-    // @PostMapping("/new")
-    // @Operation(
-    //     tags = {"Employee Api contoller"}
-    // )
-    // public ResponseEntity<?> createNewEmployee(@RequestBody @Valid EmployeePojo employee) {
-    //     return employeeServices.createNewEmployee(employee);
-    // }
+    @PostMapping("/new")
+    @Operation(
+        tags = {"Employee Api contoller"}
+    )
+    public ResponseEntity<Response> createNewEmployee(@RequestBody @Valid EmployeeDto employee) {
+        Response response = employeeServices.createNewEmployee(employee);
+        return new ResponseEntity<Response>(response, response.getStatus());
+    }
 
-    // @DeleteMapping("/delete/{id}")
-    // @Operation(
-    //     tags = {"Employee Api contoller"}
-    // )
-    // public ResponseEntity<?> deleteOneEmployee(@PathVariable("id") long id) {
-    //     return employeeServices.deleteOneEmployee(id);
-    // }
+    @DeleteMapping("/delete/{id}")
+    @Operation(
+        tags = {"Employee Api contoller"}
+    )
+    public ResponseEntity<Response> deleteOneEmployee(@PathVariable("id") long id) {
+        Response response = employeeServices.deleteOneEmployee(id);
+        return new ResponseEntity<Response>(response, response.getStatus());
+    }
 
-    // @PutMapping("/update/{id}")
-    // @Operation(
-    //     tags = {"Employee Api contoller"}
-    // )
-    // public ResponseEntity<?> updateOneEmployee(@PathVariable("id") long id, @RequestBody EmployeePojo employee) {
-    //     return employeeServices.updateOneEmployee(id, employee);
-    // }
+    @PutMapping("/update/{id}/{dptId}")
+    @Operation(
+        tags = {"Employee Api contoller"}
+    )
+    public ResponseEntity<Response> updateOneEmployee(@PathVariable("id") Long id,@PathVariable(required = false, name = "dptId") Long dptId, @RequestBody @Valid EmployeeDto employee) {
+        Response response = employeeServices.updateOneEmployee(id, dptId, employee);
+        return new ResponseEntity<Response>(response, response.getStatus());
+    }
 }

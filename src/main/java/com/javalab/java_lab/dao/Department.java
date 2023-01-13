@@ -1,13 +1,13 @@
 package com.javalab.java_lab.dao;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 @Entity
 @Table(name = "departments", uniqueConstraints = {
     //@UniqueConstraint(columnNames = {"department_name"})
 })
+@Data
 public class Department {
     
     @Id
@@ -16,7 +16,6 @@ public class Department {
     private Long id;
 
     @Column(name = "department_name", nullable = false)
-    @NotNull(message = "A department name must be provided")
     private String name;
 
     @Column(name = "department_description")
