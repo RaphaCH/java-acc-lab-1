@@ -22,7 +22,4 @@ public class JavaLabApplication {
 		SpringApplication.run(JavaLabApplication.class, args);
 		log.info("Java Lab Application Started");
 	}
-
-	
-
 }

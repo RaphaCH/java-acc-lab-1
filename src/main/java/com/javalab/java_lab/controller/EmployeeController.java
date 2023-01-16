@@ -28,13 +28,13 @@ import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/employee") 
+@RequestMapping("/employees") 
 public class EmployeeController {
 
     @Autowired
     private EmployeeServices employeeServices;
 
-    @GetMapping("/all")
+    @GetMapping()
     //The operation annotation is method specific. 
     //The TAG argument could override the default organization of every CRUD operation being held under same controller class
     //and be used to bundle together CRUD operations that have not originally been place in the same controller.
@@ -70,7 +70,7 @@ public class EmployeeController {
         return new ResponseEntity<Response>(response, response.getStatus());
     }
 
-    @PostMapping("/new")
+    @PostMapping()
     @Operation(
         tags = {"Employee Api contoller"}
     )
@@ -79,7 +79,7 @@ public class EmployeeController {
         return new ResponseEntity<Response>(response, response.getStatus());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Operation(
         tags = {"Employee Api contoller"}
     )
@@ -88,7 +88,7 @@ public class EmployeeController {
         return new ResponseEntity<Response>(response, response.getStatus());
     }
 
-    @PutMapping("/update/{id}/{dptId}")
+    @PutMapping("/{id}/{dptId}")
     @Operation(
         tags = {"Employee Api contoller"}
     )
