@@ -4,23 +4,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.javalab.java_lab.dao.Department;
 import com.javalab.java_lab.dao.DepartmentRepository;
 import com.javalab.java_lab.dao.Employee;
 import com.javalab.java_lab.dao.EmployeeRepository;
-import com.javalab.java_lab.mapper.DepartmentMapper;
 import com.javalab.java_lab.mapper.EmployeeMapper;
 import com.javalab.java_lab.model.Response;
 import com.javalab.java_lab.model.EmployeeDto;
-import com.javalab.java_lab.model.ErrorMessage;
 
 @Service
 public class EmployeeServices {
