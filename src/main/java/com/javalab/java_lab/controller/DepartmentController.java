@@ -16,7 +16,6 @@ import com.javalab.java_lab.mapper.ErrorMessageMapper;
 import com.javalab.java_lab.model.CustomException;
 import com.javalab.java_lab.model.Department;
 import com.javalab.java_lab.model.ErrorMessage;
-import com.javalab.java_lab.model.Response;
 import com.javalab.java_lab.service.DepartmentServices;
 
 import jakarta.validation.Valid;
