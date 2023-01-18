@@ -101,7 +101,6 @@ public class EmployeeController {
             HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(errorMessage.getStatusCode()));
             return new ResponseEntity<ErrorMessage>(errorMessage, httpStatus);
         }
-        
     }
 
     @PutMapping("/{id}/{dptId}")

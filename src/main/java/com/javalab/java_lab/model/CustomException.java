@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class CustomException extends Exception {
     
-    private String code;
+    private String statusCode;
     private String errorMessage;
-    private String subcode;
+    private String subCode;
     private String details;
 
 }
