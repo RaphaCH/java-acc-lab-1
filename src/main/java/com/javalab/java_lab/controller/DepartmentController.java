@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javalab.java_lab.model.DepartmentDto;
+import com.javalab.java_lab.model.Department;
 import com.javalab.java_lab.model.Response;
 import com.javalab.java_lab.service.DepartmentServices;
 
@@ -33,7 +33,7 @@ public class DepartmentController {
     }
 
     @PostMapping()
-    public ResponseEntity<Response> createDepartment(@org.springframework.web.bind.annotation.RequestBody @Valid DepartmentDto department ) {
+    public ResponseEntity<Response> createDepartment(@org.springframework.web.bind.annotation.RequestBody @Valid Department department ) {
         Response response = departmentServices.createNewDeparment(department);
         return new ResponseEntity<Response>(response, response.getStatus());
     }

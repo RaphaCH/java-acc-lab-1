@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepartmentDto {
+public class Department {
    
     private Long id;
     @NotBlank(message = "Department name is mandatory")

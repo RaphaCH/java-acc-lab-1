@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.javalab.java_lab.dao.Department;
+import com.javalab.java_lab.dao.DepartmentEntity;
 import com.javalab.java_lab.dao.DepartmentRepository;
 import com.javalab.java_lab.mapper.DepartmentMapper;
-import com.javalab.java_lab.model.DepartmentDto;
+import com.javalab.java_lab.model.Department;
 
 import com.javalab.java_lab.model.Response;
 
@@ -27,14 +27,14 @@ public class DepartmentServices {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public Response createNewDeparment(DepartmentDto departmentDto) {
-        Department department = DepartmentMapper.toDepartment(departmentDto);
-        String dptName = department.getName();
-        Department dptExists =  departmentRepository.findDepartmentByName(dptName);
+    public Response createNewDeparment(Department department) {
+        DepartmentEntity departmentEntity = DepartmentMapper.toDepartmentEntity(department);
+        String dptName = departmentEntity.getName();
+        DepartmentEntity dptExists =  departmentRepository.findDepartmentByName(dptName);
         if(dptExists == null) {
-            log.info("{} department does not exist in the database, creating new department {}", dptName, department);
-            departmentRepository.save(department);
-            return new Response(true, "201 - Department Created", HttpStatus.CREATED, departmentDto);
+            log.info("{} department does not exist in the database, creating new department {}", dptName, departmentEntity);
+            departmentRepository.save(departmentEntity);
+            return new Response(true, "201 - Department Created", HttpStatus.CREATED, department);
         } else {
             EntityExistsException e = new EntityExistsException("department " + dptName + " already exists in the database");
             log.error("department {} already exists in the database, which throws {}", dptName, e.getClass());
@@ -43,12 +43,12 @@ public class DepartmentServices {
     }
 
     public Response retrieveAllDepartments() {
-        List<Department> departments = departmentRepository.findAll();
-        List<DepartmentDto> departmentDtos = departments
+        List<DepartmentEntity> departmentEntities = departmentRepository.findAll();
+        List<Department> departments = departmentEntities
                 .stream()
-                .map(department -> DepartmentMapper.toDepartmentDto(department))
+                .map(department -> DepartmentMapper.toDepartment(department))
                 .collect(Collectors.toList());
-        return new Response(true, "200 - All Departments retrieved", HttpStatus.OK, departmentDtos);
+        return new Response(true, "200 - All Departments retrieved", HttpStatus.OK, departments);
     }
 
 

@@ -1,35 +1,35 @@
 package com.javalab.java_lab.mapper;
 
-import com.javalab.java_lab.dao.Employee;
-import com.javalab.java_lab.model.EmployeeDto;
+import com.javalab.java_lab.dao.EmployeeEntity;
+import com.javalab.java_lab.model.Employee;
 
 public class EmployeeMapper {
     
 
-    public static EmployeeDto toEmployeeDto(Employee employee) {
-        if(employee == null) return null;
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(employee.getId());
-        employeeDto.setFirstName(employee.getFirstName());
-        employeeDto.setLastName(employee.getLastName());
-        employeeDto.setSalary(employee.getSalary());
-        employeeDto.setAge(employee.getAge());
-        employeeDto.setJobTitle(employee.getJobTitle());
-        employeeDto.setDepartment(DepartmentMapper.toDepartmentDto(employee.getDepartment()));
-        return employeeDto;
+    public static Employee toEmployee(EmployeeEntity employeeEntity) {
+        if(employeeEntity == null) return null;
+        Employee employee = new Employee();
+        employee.setId(employeeEntity.getId());
+        employee.setFirstName(employeeEntity.getFirstName());
+        employee.setLastName(employeeEntity.getLastName());
+        employee.setSalary(employeeEntity.getSalary());
+        employee.setAge(employeeEntity.getAge());
+        employee.setJobTitle(employeeEntity.getJobTitle());
+        employee.setDepartment(DepartmentMapper.toDepartment(employeeEntity.getDepartment()));
+        return employee;
     }
 
-    public static Employee toEmployee(EmployeeDto employeeDto) {
-        if(employeeDto == null) return null;
-        Employee employee = new Employee();
-        employee.setId(employeeDto.getId());
-        employee.setFirstName(employeeDto.getFirstName());
-        employee.setLastName(employeeDto.getLastName());
-        employee.setSalary(employeeDto.getSalary());
-        employee.setAge(employeeDto.getAge());
-        employee.setJobTitle(employeeDto.getJobTitle());
-        employee.setDepartment(DepartmentMapper.toDepartment(employeeDto.getDepartment()));
-        return employee;
+    public static EmployeeEntity toEmployeeEntity(Employee employee) {
+        if(employee == null) return null;
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setId(employee.getId());
+        employeeEntity.setFirstName(employee.getFirstName());
+        employeeEntity.setLastName(employee.getLastName());
+        employeeEntity.setSalary(employee.getSalary());
+        employeeEntity.setAge(employee.getAge());
+        employeeEntity.setJobTitle(employee.getJobTitle());
+        employeeEntity.setDepartment(DepartmentMapper.toDepartmentEntity(employee.getDepartment()));
+        return employeeEntity;
     }
 
 }

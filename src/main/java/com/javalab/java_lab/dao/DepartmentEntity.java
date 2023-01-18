@@ -8,7 +8,7 @@ import lombok.Data;
     //@UniqueConstraint(columnNames = {"department_name"})
 })
 @Data
-public class Department {
+public class DepartmentEntity {
     
     @Id
     @Column(name = "department_id")

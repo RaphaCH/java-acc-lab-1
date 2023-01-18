@@ -6,18 +6,21 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.javalab.java_lab.dao.Department;
+import com.javalab.java_lab.dao.DepartmentEntity;
 import com.javalab.java_lab.dao.DepartmentRepository;
-import com.javalab.java_lab.dao.Employee;
+import com.javalab.java_lab.dao.EmployeeEntity;
 import com.javalab.java_lab.dao.EmployeeRepository;
 import com.javalab.java_lab.mapper.EmployeeMapper;
-import com.javalab.java_lab.model.Response;
-import com.javalab.java_lab.model.EmployeeDto;
+
+// import lombok.extern.slf4j.Slf4j;
+
+import com.javalab.java_lab.model.CustomException;
+import com.javalab.java_lab.model.Employee;
 
 @Service
+// @Slf4j
 public class EmployeeServices {
 
     @Autowired
@@ -28,66 +31,69 @@ public class EmployeeServices {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(EmployeeServices.class);
 
-    public Response getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
-        List<EmployeeDto> employeeDtos = employees
+    public List<Employee> getAllEmployees() {
+        List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
+        List<Employee> employees = employeeEntities
                 .stream()
-                .map(employee -> EmployeeMapper.toEmployeeDto(employee))
+                .map(employee -> EmployeeMapper.toEmployee(employee))
                 .collect(Collectors.toList());
-        return new Response(true, "200 - All Employees retrieved", HttpStatus.OK, employeeDtos);
+        return employees;
     }
 
-    public Response getOneEmployee(long id) {
+    public Employee getOneEmployee(long id) throws CustomException {
         log.info("Getting one employee, {}", id);
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        Optional<EmployeeEntity> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {
-            Employee foundEmployee = optionalEmployee.get();
-            EmployeeDto employeeDto = EmployeeMapper.toEmployeeDto(foundEmployee);
-            return new Response(true, "Success", HttpStatus.OK, employeeDto);
+            EmployeeEntity foundEmployee = optionalEmployee.get();
+            Employee employee = EmployeeMapper.toEmployee(foundEmployee);
+            // return new Response(true, "Success", HttpStatus.OK, employeeDto);
+            return employee;
         } else {
-            return new Response(false, "404 - Employee not found", HttpStatus.NOT_FOUND, null);
+            throw new CustomException("404", "Not_Found", "404", "Employee with id " + id + " not found in the database");
         }
     }
 
-    public Response createNewEmployee(EmployeeDto employeeDto) {
-        Employee employee = EmployeeMapper.toEmployee(employeeDto);
-        employeeRepository.save(employee);
-        return new Response(true, "201 - Employee created", HttpStatus.CREATED, employeeDto);
+    public Employee createNewEmployee(Employee employee) {
+        EmployeeEntity employeeEntity = EmployeeMapper.toEmployeeEntity(employee);
+        employeeRepository.save(employeeEntity);
+        Employee createdEmployee = EmployeeMapper.toEmployee(employeeEntity);
+        return createdEmployee;
+        // return new Response(true, "201 - Employee created", HttpStatus.CREATED, employee);
     }
 
-    public Response deleteOneEmployee(long id) {
+    public String deleteOneEmployee(long id) throws CustomException {
         boolean exists = employeeRepository.existsById(id);
-        if (!exists) {
-            return new Response(false, "404 - Employee not found", HttpStatus.NOT_FOUND, null);
-        } else {
+        if (exists) {
             employeeRepository.deleteById(id);
-            return new Response(true, "200 - Employee deleted", HttpStatus.OK, null);
+            return "Employee with id " + id + " deleted successfully";
+        } else {
+            throw new CustomException("404", "Not_Found", "404", "Employee with id " + id + " not found in the database");
         }
     }
 
-    public Response updateOneEmployee(Long id, Long dptId, EmployeeDto employeeDto) {
+    public Employee updateOneEmployee(Long id, Long dptId, Employee employee) throws CustomException {
         log.info("Updating one employee, {}, dpt id = {}", id, dptId);
-        Employee employee = EmployeeMapper.toEmployee(employeeDto);
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        EmployeeEntity employeeEntity = EmployeeMapper.toEmployeeEntity(employee);
+        Optional<EmployeeEntity> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {
-            Employee foundEmployee = optionalEmployee.get();
-            foundEmployee.setFirstName(employee.getFirstName());
-            foundEmployee.setLastName(employee.getLastName());
-            foundEmployee.setSalary(employee.getSalary());
-            foundEmployee.setAge(employee.getAge());
-            foundEmployee.setJobTitle(employee.getJobTitle());
+            EmployeeEntity foundEmployee = optionalEmployee.get();
+            foundEmployee.setFirstName(employeeEntity.getFirstName());
+            foundEmployee.setLastName(employeeEntity.getLastName());
+            foundEmployee.setSalary(employeeEntity.getSalary());
+            foundEmployee.setAge(employeeEntity.getAge());
+            foundEmployee.setJobTitle(employeeEntity.getJobTitle());
             if (dptId != null) {
-                Optional<Department> optionalDepartment = departmentRepository.findById(dptId);
+                Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(dptId);
                 if (optionalDepartment.isPresent()) {
-                    Department foundDepartment = optionalDepartment.get();
+                    DepartmentEntity foundDepartment = optionalDepartment.get();
                     foundEmployee.setDepartment(foundDepartment);
                 }
             }
             employeeRepository.save(foundEmployee);
-            EmployeeDto updatedEmployeeDto = EmployeeMapper.toEmployeeDto(foundEmployee);
-            return new Response(true, "Employee updated successfully", HttpStatus.OK, updatedEmployeeDto);
+            Employee updatedEmployee = EmployeeMapper.toEmployee(foundEmployee);
+            return updatedEmployee;
         } else {
-            return new Response(false, "404 - Employee not found", HttpStatus.NOT_FOUND, null);
+            throw new CustomException("404", "Not_Found", "404", "Employee with id " + id + " not found in the database");
         }
     }
 }

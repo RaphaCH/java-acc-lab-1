@@ -7,7 +7,7 @@ import lombok.Data;
     //@UniqueConstraint(name = "example_student_email_unique", columnNames = "example_column_name")
 })
 @Data
-public class Employee {
+public class EmployeeEntity {
 
     // Oracle db annotarion;
     @Id
@@ -31,8 +31,8 @@ public class Employee {
     @Column(name = "job_title")
     private String jobTitle;
 
-    @ManyToOne(targetEntity = Department.class)
-    private Department department;
+    @ManyToOne(targetEntity = DepartmentEntity.class)
+    private DepartmentEntity department;
 
     @Column(name = "department_id", nullable = true)
     private Long departmentId;

@@ -1,14 +1,14 @@
 package com.javalab.java_lab.mapper;
 
-import com.javalab.java_lab.dao.Department;
-import com.javalab.java_lab.model.DepartmentDto;
+import com.javalab.java_lab.dao.DepartmentEntity;
+import com.javalab.java_lab.model.Department;
 
 public class DepartmentMapper {
     
 
-    public static DepartmentDto toDepartmentDto(Department department) {
+    public static Department toDepartment(DepartmentEntity department) {
         if(department == null) return null;
-        DepartmentDto departmentDto = new DepartmentDto();
+        Department departmentDto = new Department();
         departmentDto.setId(department.getId());
         departmentDto.setName(department.getName());
         departmentDto.setDescription(department.getDescription());
@@ -16,9 +16,9 @@ public class DepartmentMapper {
         return departmentDto;
     }
 
-    public static Department toDepartment(DepartmentDto departmentDto) {
+    public static DepartmentEntity toDepartmentEntity(Department departmentDto) {
         if(departmentDto == null) return null;
-        Department department = new Department();
+        DepartmentEntity department = new DepartmentEntity();
         department.setId(departmentDto.getId());
         department.setName(departmentDto.getName());
         department.setDescription(departmentDto.getDescription());

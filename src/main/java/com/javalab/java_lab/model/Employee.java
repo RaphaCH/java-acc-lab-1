@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDto {
+public class Employee {
     
     private Long id;
 
@@ -25,6 +25,6 @@ public class EmployeeDto {
 
     private String jobTitle;
 
-    private DepartmentDto department;
+    private Department department;
 
 }

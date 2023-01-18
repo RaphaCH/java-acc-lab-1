@@ -22,4 +22,13 @@ public class JavaLabApplication {
 		SpringApplication.run(JavaLabApplication.class, args);
 		log.info("Java Lab Application Started");
 	}
+
+	//TODO
+	// rename EmployeeDTO => Employee and Employee => EmployeeEntity => DONE
+	// implement ErrorMessage classes on both ApiResponse 
+	// implement CustomException class on EntityAPi => DONE
+	// Implmenet mapper from CustomException to errorMessage => DONE
+	// refactor Service and Controller to return either Employee or the CustomException => DONE
+	// refactor Ceontroller to return ResponseEntity<Employee> || ResponseEntity<ErrorMessage> => DONE
+	// finish implementing the RestClientError class to bypass WebClient and return what we want
 }

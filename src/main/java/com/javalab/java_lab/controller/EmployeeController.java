@@ -1,7 +1,10 @@
 package com.javalab.java_lab.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javalab.java_lab.model.EmployeeDto;
-import com.javalab.java_lab.model.Response;
+import com.javalab.java_lab.mapper.ErrorMessageMapper;
+import com.javalab.java_lab.model.CustomException;
+import com.javalab.java_lab.model.Employee;
+import com.javalab.java_lab.model.ErrorMessage;
 import com.javalab.java_lab.service.EmployeeServices;
 
 //import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -46,9 +51,9 @@ public class EmployeeController {
         }
         //externalDocs = @ExternalDocumentation(),
     )
-    public ResponseEntity<Response> getAllEmployees() {
-        Response response = employeeServices.getAllEmployees();
-        return new ResponseEntity<Response>(response, response.getStatus());
+    public ResponseEntity<?> getAllEmployees() {
+        List<Employee> response = employeeServices.getAllEmployees();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -58,39 +63,59 @@ public class EmployeeController {
         description = "Get one employee from the database by providing his/her id in as a path parameter. Example: writing 1 on the path will retrieve the Employee with id 1, if he/she exists in the Database.",
         parameters = {@Parameter(name = "id", example = "1", description = "Provide it as a number on the url path {id} where indicated")},
         responses = {
-            @ApiResponse(responseCode = "200", description = "Response 200-ok whenever the provided id returns one found Employee from the Database.", useReturnTypeSchema = true, content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = EmployeeDto.class))),
+            @ApiResponse(responseCode = "200", description = "Response 200-ok whenever the provided id returns one found Employee from the Database.", useReturnTypeSchema = true, content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Employee.class))),
             @ApiResponse(responseCode = "404", description = "Response returned whenever the provided id does not find any Emoployee in the Database.")
         }
     )
-    public ResponseEntity<Response> getOneEmployee(@PathVariable("id") long id) {
-        Response response =  employeeServices.getOneEmployee(id);
-        return new ResponseEntity<Response>(response, response.getStatus());
+    public ResponseEntity<?> getOneEmployee(@PathVariable("id") long id) {
+        // Response response =  employeeServices.getOneEmployee(id);
+        try {
+            Employee employee = employeeServices.getOneEmployee(id);
+            return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+        } catch (CustomException e) {
+            ErrorMessage errorMessage = ErrorMessageMapper.toErrorMessage(e);
+            HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(errorMessage.getStatusCode()));
+            return new ResponseEntity<ErrorMessage>(errorMessage, httpStatus);
+        }
     }
 
     @PostMapping()
     @Operation(
         tags = {"Employee Api contoller"}
     )
-    public ResponseEntity<Response> createNewEmployee(@RequestBody @Valid EmployeeDto employee) {
-        Response response = employeeServices.createNewEmployee(employee);
-        return new ResponseEntity<Response>(response, response.getStatus());
+    public ResponseEntity<?> createNewEmployee(@RequestBody @Valid Employee employee) {
+        Employee response = employeeServices.createNewEmployee(employee);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     @Operation(
         tags = {"Employee Api contoller"}
     )
-    public ResponseEntity<Response> deleteOneEmployee(@PathVariable("id") long id) {
-        Response response = employeeServices.deleteOneEmployee(id);
-        return new ResponseEntity<Response>(response, response.getStatus());
+    public ResponseEntity<?> deleteOneEmployee(@PathVariable("id") long id) {
+        try {
+            String response = employeeServices.deleteOneEmployee(id);
+            return new ResponseEntity<String>(response, HttpStatus.OK);
+        } catch (CustomException e) {
+            ErrorMessage errorMessage = ErrorMessageMapper.toErrorMessage(e);
+            HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(errorMessage.getStatusCode()));
+            return new ResponseEntity<ErrorMessage>(errorMessage, httpStatus);
+        }
+        
     }
 
     @PutMapping("/{id}/{dptId}")
     @Operation(
         tags = {"Employee Api contoller"}
     )
-    public ResponseEntity<Response> updateOneEmployee(@PathVariable("id") Long id,@PathVariable(required = false, name = "dptId") Long dptId, @RequestBody @Valid EmployeeDto employee) {
-        Response response = employeeServices.updateOneEmployee(id, dptId, employee);
-        return new ResponseEntity<Response>(response, response.getStatus());
+    public ResponseEntity<?> updateOneEmployee(@PathVariable("id") Long id,@PathVariable(required = false, name = "dptId") Long dptId, @RequestBody @Valid Employee employee) {
+        try {
+            Employee response = employeeServices.updateOneEmployee(id, dptId, employee);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (CustomException e) {
+            ErrorMessage errorMessage = ErrorMessageMapper.toErrorMessage(e);
+            HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(errorMessage.getStatusCode()));
+            return new ResponseEntity<ErrorMessage>(errorMessage, httpStatus);
+        }
     }
 }
