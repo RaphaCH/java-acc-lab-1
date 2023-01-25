@@ -38,7 +38,7 @@ public class EmployeeServices {
                 .map(employee -> EmployeeMapper.toEmployee(employee))
                 .collect(Collectors.toList());
         return employees;
-    }
+    }   
 
     public Employee getOneEmployee(long id) throws CustomException {
         log.info("Getting one employee, {}", id);
