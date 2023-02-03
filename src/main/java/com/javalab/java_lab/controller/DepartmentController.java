@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javalab.java_lab.mapper.ErrorMessageMapper;
 import com.javalab.java_lab.model.CustomException;
 import com.javalab.java_lab.model.Department;
-import com.javalab.java_lab.model.ErrorMessage;
 import com.javalab.java_lab.service.DepartmentServices;
 
 import jakarta.validation.Valid;
