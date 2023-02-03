@@ -14,7 +14,6 @@ import com.javalab.java_lab.mapper.ErrorMessageMapper;
 import com.javalab.java_lab.model.CustomException;
 import com.javalab.java_lab.model.ErrorConstant;
 import com.javalab.java_lab.model.ErrorMessage;
-import com.javalab.java_lab.model.Response;
 
 @ControllerAdvice
 public class EmployeeControllerAdvice {
