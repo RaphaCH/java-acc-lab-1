@@ -1,6 +1,5 @@
 package com.javalab.java_lab.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import com.javalab.java_lab.service.DepartmentServices;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/departments")
@@ -29,8 +27,6 @@ public class DepartmentController {
     @Autowired
     private DepartmentServices departmentServices;
 
-    
-
     @GetMapping()
     public ResponseEntity<?> getAllDepartments() {
         List<Department> response = departmentServices.retrieveAllDepartments();
@@ -38,16 +34,9 @@ public class DepartmentController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createDepartment(@org.springframework.web.bind.annotation.RequestBody @Valid Department department ) {
-        try {
-            Department response = departmentServices.createNewDeparment(department);
+    public ResponseEntity<?> createDepartment(
+            @org.springframework.web.bind.annotation.RequestBody @Valid Department department) throws CustomException {
+        Department response = departmentServices.createNewDeparment(department);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (CustomException e) {
-            ErrorMessage errorMessage = ErrorMessageMapper.toErrorMessage(e);
-            HttpStatus status = HttpStatus.valueOf(Integer.parseInt(errorMessage.getStatusCode()));
-            return new ResponseEntity<>(errorMessage, status);
-        }
-        
-        
     }
 }
