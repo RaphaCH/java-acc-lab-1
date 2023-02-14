@@ -28,8 +28,8 @@ public class JavaLabApplication {
 	// Implement Aspect Logging in this project too
 	// Implement ErrorMessage Enum in error returns
 	// Align ErrorHandling in both projects
-	// Implement @Transactional in both projects
-	// DeleteOne in Employee/Department returning String is a problem in Task API
+	// Implement @Transactional in both projects - Basic Impl DONE
+	// DeleteOne in Employee/Department returning String is a problem in Task API - DONE
 	// Finish getting used to Swagger and OpenAPI two-way implementation
 
 

@@ -19,6 +19,8 @@ import com.javalab.java_lab.mapper.EmployeeMapper;
 import com.javalab.java_lab.model.CustomException;
 import com.javalab.java_lab.model.Employee;
 
+import jakarta.transaction.Transactional;
+
 @Service
 // @Slf4j
 public class EmployeeServices {
@@ -76,6 +78,7 @@ public class EmployeeServices {
         }
     }
 
+    @Transactional
     public Employee updateOneEmployee(Long id, Long dptId, Employee employee) throws CustomException {
         log.info("Updating one employee, {}, dpt id = {}", id, dptId);
         EmployeeEntity employeeEntity = EmployeeMapper.toEmployeeEntity(employee);

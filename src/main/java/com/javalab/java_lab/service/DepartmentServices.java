@@ -46,7 +46,6 @@ public class DepartmentServices {
         }
     }
 
-
     public void deleteOneDepartment(long id) throws CustomException {
         boolean exists = departmentRepository.existsById(id);
         if (exists) {
