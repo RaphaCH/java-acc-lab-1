@@ -53,19 +53,24 @@ public class EmployeeServices {
         }
     }
 
-    public Employee createNewEmployee(Employee employee) {
+    public Employee createNewEmployee(Employee employee, Long dptId) throws CustomException {
         EmployeeEntity employeeEntity = EmployeeMapper.toEmployeeEntity(employee);
-        employeeRepository.save(employeeEntity);
-        Employee createdEmployee = EmployeeMapper.toEmployee(employeeEntity);
-        return createdEmployee;
-        // return new Response(true, "201 - Employee created", HttpStatus.CREATED, employee);
+        boolean departmentExists = departmentRepository.existsById(dptId);
+        if (departmentExists) {
+            DepartmentEntity Department = departmentRepository.findById(dptId).get();
+            employeeEntity.setDepartment(Department);
+            employeeRepository.save(employeeEntity);
+            Employee createdEmployee = EmployeeMapper.toEmployee(employeeEntity);
+            return createdEmployee;
+        } else {
+            throw new CustomException("404", "Not_Found", "404", "Department with id " + dptId + " not found in the database");
+        }
     }
 
-    public String deleteOneEmployee(long id) throws CustomException {
+    public void deleteOneEmployee(long id) throws CustomException {
         boolean exists = employeeRepository.existsById(id);
         if (exists) {
             employeeRepository.deleteById(id);
-            return "Employee with id " + id + " deleted successfully";
         } else {
             throw new CustomException("404", "Not_Found", "404", "Employee with id " + id + " not found in the database");
         }

@@ -46,4 +46,14 @@ public class DepartmentServices {
         }
     }
 
+
+    public void deleteOneDepartment(long id) throws CustomException {
+        boolean exists = departmentRepository.existsById(id);
+        if (exists) {
+            departmentRepository.deleteById(id);
+        } else {
+            throw new CustomException("404", "Not_Found", "404", "Department with id " + id + " not found in the database");
+        }
+    }
+
 }

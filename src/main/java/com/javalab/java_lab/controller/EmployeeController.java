@@ -3,6 +3,7 @@ package com.javalab.java_lab.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javalab.java_lab.model.CustomException;
@@ -65,16 +67,16 @@ public class EmployeeController {
 
     @PostMapping()
     @Operation(tags = { "Employee Api contoller" })
-    public ResponseEntity<?> createNewEmployee(@RequestBody @Valid Employee employee) {
-        Employee response = employeeServices.createNewEmployee(employee);
+    public ResponseEntity<?> createNewEmployee(@RequestBody @Valid Employee employee, @RequestParam(value = "deptId", required = true) long deptId) throws CustomException {
+        Employee response = employeeServices.createNewEmployee(employee, deptId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     @Operation(tags = { "Employee Api contoller" })
     public ResponseEntity<?> deleteOneEmployee(@PathVariable("id") long id) throws CustomException {
-        String response = employeeServices.deleteOneEmployee(id);
-        return new ResponseEntity<String>(response, HttpStatus.OK);
+        employeeServices.deleteOneEmployee(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}/{dptId}")

@@ -23,6 +23,14 @@ public class JavaLabApplication {
 		log.info("Java Lab Application Started");
 	}
 
-	// If we're reading this, this is the newest version
+	// TODOs / Update:
+	// Create Employee should bind employee to department immediately - DONE 
+	// Implement Aspect Logging in this project too
+	// Implement ErrorMessage Enum in error returns
+	// Align ErrorHandling in both projects
+	// Implement @Transactional in both projects
+	// DeleteOne in Employee/Department returning String is a problem in Task API
+	// Finish getting used to Swagger and OpenAPI two-way implementation
+
 
 }
