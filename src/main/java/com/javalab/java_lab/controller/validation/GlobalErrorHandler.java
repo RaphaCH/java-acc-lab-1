@@ -16,7 +16,7 @@ import com.javalab.java_lab.model.ErrorConstant;
 import com.javalab.java_lab.model.ErrorMessage;
 
 @ControllerAdvice
-public class EmployeeControllerAdvice {
+public class GlobalErrorHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException exception) {

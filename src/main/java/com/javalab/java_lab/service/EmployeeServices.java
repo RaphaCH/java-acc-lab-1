@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +30,6 @@ public class EmployeeServices {
     @Autowired
     DepartmentRepository departmentRepository;
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(EmployeeServices.class);
-
     public List<Employee> getAllEmployees() {
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
         List<Employee> employees = employeeEntities
@@ -43,7 +40,6 @@ public class EmployeeServices {
     }   
 
     public Employee getOneEmployee(long id) throws CustomException {
-        log.info("Getting one employee, {}", id);
         Optional<EmployeeEntity> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {
             EmployeeEntity foundEmployee = optionalEmployee.get();
@@ -80,7 +76,6 @@ public class EmployeeServices {
 
     @Transactional
     public Employee updateOneEmployee(Long id, Long dptId, Employee employee) throws CustomException {
-        log.info("Updating one employee, {}, dpt id = {}", id, dptId);
         EmployeeEntity employeeEntity = EmployeeMapper.toEmployeeEntity(employee);
         Optional<EmployeeEntity> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {

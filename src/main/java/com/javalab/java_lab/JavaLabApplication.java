@@ -3,12 +3,14 @@ package com.javalab.java_lab;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @OpenAPIDefinition(info = @Info(
 	title = "Employee | Department Java Spring Boot Lab",
 	description = "A test project to get used to Spring Boot",
@@ -25,7 +27,7 @@ public class JavaLabApplication {
 
 	// TODOs / Update:
 	// Create Employee should bind employee to department immediately - DONE 
-	// Implement Aspect Logging in this project too
+	// Implement Aspect Logging in this project too - DONE
 	// Implement ErrorMessage Enum in error returns
 	// Align ErrorHandling in both projects
 	// Implement @Transactional in both projects - Basic Impl DONE
