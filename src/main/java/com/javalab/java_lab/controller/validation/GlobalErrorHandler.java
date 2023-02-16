@@ -1,15 +1,12 @@
 package com.javalab.java_lab.controller.validation;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.validation.FieldError;
-
 import com.javalab.java_lab.mapper.ErrorMessageMapper;
 import com.javalab.java_lab.model.CustomException;
 import com.javalab.java_lab.model.ErrorConstant;
@@ -20,14 +17,14 @@ public class GlobalErrorHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException exception) {
-        Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        // ErrorMessage for the moment - by design - only accepts strings, is this how we would use the enums with it?
-        ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST.toString(), ErrorConstant.TEC001.key, ErrorConstant.TEC001.value, "some details should go here too", errors);
+        String stringOfErrors = exception.getBindingResult().getAllErrors().stream()
+            .map(error -> error.getDefaultMessage())
+            .collect(Collectors.joining("; "));
+        ErrorMessage message = new ErrorMessage(
+            ErrorConstant.TEC001.key,
+            ErrorConstant.TEC001.value, 
+            exception.getBody().getDetail() ,
+            stringOfErrors);
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
