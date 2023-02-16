@@ -29,10 +29,9 @@ public class JavaLabApplication {
 	// Create Employee should bind employee to department immediately - DONE 
 	// Implement Aspect Logging in this project too - DONE
 	// Implement ErrorMessage Enum in error returns
-	// Align ErrorHandling in both projects
+	// Align ErrorHandling in both projects - DONE
 	// Implement @Transactional in both projects - Basic Impl DONE
 	// DeleteOne in Employee/Department returning String is a problem in Task API - DONE
-	// Finish getting used to Swagger and OpenAPI two-way implementation
-
+	// Re-implement test classes in both projects 
 
 }

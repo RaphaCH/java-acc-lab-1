@@ -21,7 +21,6 @@ import com.javalab.java_lab.model.Employee;
 import jakarta.transaction.Transactional;
 
 @Service
-// @Slf4j
 public class EmployeeServices {
 
     @Autowired

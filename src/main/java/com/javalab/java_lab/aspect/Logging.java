@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 @Aspect
 @Component
 @Log4j2
+// @Slf4j
 public class Logging {
 
     // Useful pointcuts for reference
