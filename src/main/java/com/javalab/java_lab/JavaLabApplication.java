@@ -28,7 +28,7 @@ public class JavaLabApplication {
 	// TODOs / Update:
 	// Create Employee should bind employee to department immediately - DONE 
 	// Implement Aspect Logging in this project too - DONE
-	// Implement ErrorMessage Enum in error returns
+	// Implement ErrorMessage Enum in error returns - DONE?
 	// Align ErrorHandling in both projects - DONE
 	// Implement @Transactional in both projects - Basic Impl DONE
 	// DeleteOne in Employee/Department returning String is a problem in Task API - DONE

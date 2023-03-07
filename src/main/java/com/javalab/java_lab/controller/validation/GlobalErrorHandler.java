@@ -21,8 +21,8 @@ public class GlobalErrorHandler {
             .map(error -> error.getDefaultMessage())
             .collect(Collectors.joining("; "));
         ErrorMessage message = new ErrorMessage(
-            ErrorConstant.TEC001.key,
-            ErrorConstant.TEC001.value, 
+            ErrorConstant.FUNC001.key,
+            ErrorConstant.FUNC001.value, 
             exception.getBody().getDetail() ,
             stringOfErrors);
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
